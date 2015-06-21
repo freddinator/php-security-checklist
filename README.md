@@ -4,10 +4,11 @@ This work was [originally published on sk89q.com in 2009](http://www.sk89q.com/2
 
 [![Creative Commons License](https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png)](http://creativecommons.org/licenses/by-nc-sa/4.0/)  
 
+
 ## Basic
 
-*   Have strong passwords be sure that your “password recovery questions” are not too obvious.
-    *   If you write down your passwords, ensure that you put it in a safe place.
+*   Require your users have strong passwords and secure password recovery options.
+    *   Longer != better, 1000 'a's as a password gives you  the same entropy as a random 3 character password
 *   Make sure that [register_globals](http://php.net/register_globals) is disabled, because that allows arbitrary variables to be injected into your script’s environment (!).
 *   Disable magic quotes. It has no effect on security, but it leads people to think that it actually helps secure applications against SQL injection, and so people rely on it for escaping (highly wrong!). The two relevant PHP settings are [magic_quotes_gpc](http://php.net/magic_quotes_gpc) and [magic_quotes_runtime](http://php.net/magic_quotes_runtime).
 *   Disable [display_errors](http://php.net/display_errors) on your production environment to make it more difficult to learn details about your environment. You should continue to log errors, however.
@@ -91,7 +92,7 @@ This work was [originally published on sk89q.com in 2009](http://www.sk89q.com/2
 *   Hash stored passwords to make it harder for an attacker who has gained access to your database to get the raw password of users.
     *   Use [salts](http://en.wikipedia.org/wiki/Salt_%28cryptography%29) to make [rainbow tables](http://en.wikipedia.org/wiki/Rainbow_tables) ineffective. It is highly recommended that you use a different salt per user to make intrusion more difficult (you will have to store the individual salts). Salts should be sufficiently long and complex to be strong.
     *   Use the PHP [crypt](http://php.net/crypt)() function if possible, as it generates very good hashes. You want to use Blowfish or SHA and use a good number of rounds. Increasing the number of rounds causes the hash calculation to be more computationally expensive, making the hashes much harder to brute force. Because you don’t constantly generate hashes, the extra CPU required should not have a major impact.
-    *   Don’t use MD5.
+    *   MD5 is for calculating checksums of files, not securing passwords. Use a far better option
 *   If you allow your users to input password recovery questions, make sure to remind users to not use questions with answers that can be easily guessed by someone else. People’s accounts have been lost due to this very reason.
 *   Be careful with account recovery forms to not allow malicious users from discovering whether an email address is registered in your database. The only solution to this problem is to not let the user know whether the email address exists in the database when they use the password recovery form. An email always has to be sent in that situation.
 *   Remember to throttle any page that sends emails to prevent a malicious user from using your script to abuse your application.
@@ -156,3 +157,7 @@ This work was [originally published on sk89q.com in 2009](http://www.sk89q.com/2
     *   Consequently, that means that other users may also be able to read your session data.
     *   A session created on one site can be used on another as well.
 *   File uploads on one site might be accessible on another site because sites often share a single world-readable /tmp directory.
+*   
+## Solutions
+* Consider using a modern framework such as[http://laravel.com](Laravel)
+   * These have a variety of security features, such as password hashing and CSRF-protection thrown in by default
